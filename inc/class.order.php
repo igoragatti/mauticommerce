@@ -59,16 +59,8 @@ class Mauticommerce_Order extends Mauticommerce {
 	 * @access private
 	 * @return array $query posted mautic query
 	 **/
-	/**
-	 * create query to send Mautic
-	 *
-	 * @param WC_Order $order WooCommerce order object
-	 * @since 0.0.1
-	 * @access private
-	 * @return array $query posted mautic query
-	 **/
 	private function _create_query( WC_Order $order ) {
-		$items = mauticommerce_create_item_string($order->get_items());
+		$items = $this->mauticommerce_create_item_string($order->get_items());
 		$query = array(
 			'address1' => $order->billing_address_1,
 			'address2' => $order->billing_address_2,
@@ -96,19 +88,19 @@ class Mauticommerce_Order extends Mauticommerce {
 	}
 	
 	/**
-	 * Create string of products to send to mautic, each product ID is separated by a semicolon.
+	 * Create string of items
 	 *
-	 * @param WC_Order_Items $order_items WooCommerce order_items object
+	 * @param  WC_Order_Item[] $order_items WooCommerce order item object array
 	 * @since 0.0.1
 	 * @access private
-	 * @return string product Ids separated by ";"
+	 * @return $str of item id separated by semicolon
 	 **/
 	private function mauticommerce_create_item_string($order_items){
 		$str = "";
 		foreach($order_items as $item){
 			$str .= $item["product_id"].";";
 		}
-		$str_rtn = rtrim($str,";");
+		$str_rtn = substr($str,0,-1);
 		return $str_rtn;
 	}
 
